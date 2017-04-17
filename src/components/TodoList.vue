@@ -3,17 +3,22 @@
     <h1>{{ title }}</h1>
     <input type="text" name="newTodo" placeholder="New todo" v-model="newTodoName" @keyup.enter="addTodo"/>
     <button type="button" name="newTodoBtn" @click="addTodo">Add</button>
-    <p v-show="!todos.length">Nothing to do, yey!</p>
+    <p v-show="!todos.length">Nothing to do, yay!</p>
     <ul>
-      <todo v-for="(todo, index) in todos"></todo>
+      <to-do v-for="(todo, index) in todos" is="to-do" :todo="todo" :index="index" @deleteTodo="removeTodo($event)"></to-do>
     </ul>
     <pre v-if="this.log">{{ this.log }}</pre>
   </div>
 </template>
 
 <script>
+import Todo from './Todo';
+
 export default {
   name: 'TodoList',
+  components: {
+    'to-do': Todo,
+  },
   data() {
     return {
       title: 'Todo List',
@@ -56,18 +61,8 @@ ul {
   padding: 0;
 }
 
-li {
-  display: block;
-  margin: 0 10px;
-}
-
 a {
   color: #42b983;
 }
-.done {
-  text-decoration: line-through;
-}
-.btn-sm {
-  padding: 0 1px;
-}
+
 </style>
