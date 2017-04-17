@@ -5,12 +5,7 @@
     <button type="button" name="newTodoBtn" @click="addTodo">Add</button>
     <p v-show="!todos.length">Nothing to do, yey!</p>
     <ul>
-      <li v-for="(todo, index) in todos">
-        {{ index + 1 }}.
-        <span v-bind:class="{ done: todo.done }">{{ todo.name }}</span>
-        <input type="checkbox" name="done" v-model="todo.done">
-        <button type="button" name="removeTodoBtn" @click="removeTodo(todo.timestamp)" class="btn-sm">Delete</button>
-      </li>
+      <todo v-for="(todo, index) in todos"></todo>
     </ul>
     <pre v-if="this.log">{{ this.log }}</pre>
   </div>
