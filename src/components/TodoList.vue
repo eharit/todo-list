@@ -5,7 +5,14 @@
     <button type="button" name="newTodoBtn" @click="addTodo">Add</button>
     <p v-show="!todos.length">Nothing to do, yay!</p>
     <ul>
-      <to-do v-for="(todo, index) in todos" is="to-do" :todo="todo" :index="index" @deleteTodo="removeTodo($event)"></to-do>
+      <to-do v-for="(todo, index) in todos"
+        is="to-do"
+        :todo="todo"
+        :index="index"
+        @deleteTodo="removeTodo($event)"
+        @updateTodoName="updateName($event)"
+        @updateTodoStatus="updateStatus($event)">
+      </to-do>
     </ul>
     <pre v-if="this.log">{{ this.log }}</pre>
   </div>
@@ -22,7 +29,7 @@ export default {
   data() {
     return {
       title: 'Todo List',
-      todos: [],
+      todos: JSON.parse(localStorage.getItem('todoList')) || [],
       newTodoName: '',
       log: '',
     };
@@ -37,6 +44,7 @@ export default {
         };
         this.todos.push(tmpTodo);
         this.newTodoName = '';
+        this.updateLocalStorage();
       }
     },
     removeTodo(timestamp) {
@@ -45,6 +53,26 @@ export default {
       );
       const index = this.todos.indexOf(obj);
       this.todos.splice(index, 1);
+      this.updateLocalStorage();
+    },
+    updateName(data) {
+      const obj = this.todos.find(
+        n => n.timestamp === data.timestamp,
+      );
+      const index = this.todos.indexOf(obj);
+      this.todos[index].name = data.name;
+      this.updateLocalStorage();
+    },
+    updateStatus(data) {
+      const obj = this.todos.find(
+        n => n.timestamp === data.timestamp,
+      );
+      const index = this.todos.indexOf(obj);
+      this.todos[index].done = data.done;
+      this.updateLocalStorage();
+    },
+    updateLocalStorage() {
+      localStorage.setItem('todoList', JSON.stringify(this.todos));
     },
   },
 };

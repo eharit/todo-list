@@ -1,9 +1,20 @@
 <template lang="html">
   <li>
     {{ index + 1 }}.
-    <span v-bind:class="{ done: todo.done }">{{ todo.name }}</span>
-    <input type="checkbox" name="done" v-model="todo.done">
-    <button type="button" name="removeTodoBtn" @click="removeTodo(todo.timestamp)" class="btn-sm">Delete</button>
+    <input contenteditable="contenteditable"
+      v-bind:class="{ done: todo.done }"
+      @blur="updateName(todo.name, todo.timestamp)"
+      v-model="todo.name" />
+    <input type="checkbox"
+      name="done"
+      v-model="todo.done"
+      @change="updateStatus(todo.done, todo.timestamp)"/>
+    <button type="button"
+      name="removeTodoBtn"
+      @click="removeTodo(todo.timestamp)"
+      class="btn-sm">
+      Delete
+    </button>
   </li>
 </template>
 
@@ -14,12 +25,26 @@ export default {
   data() {
     return {
       timestamp: null,
+      updatedName: '',
     };
   },
   methods: {
     removeTodo(timestamp) {
-      this.timestamp = timestamp;
-      this.$emit('deleteTodo', this.timestamp);
+      this.$emit('deleteTodo', timestamp);
+    },
+    updateName(name, timestamp) {
+      const obj = {
+        name,
+        timestamp,
+      };
+      this.$emit('updateTodoName', obj);
+    },
+    updateStatus(done, timestamp) {
+      const obj = {
+        done,
+        timestamp,
+      };
+      this.$emit('updateTodoStatus', obj);
     },
   },
 };
