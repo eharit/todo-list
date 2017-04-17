@@ -1,9 +1,8 @@
 <template lang="html">
   <li>
     {{ index + 1 }}.
-    <input contenteditable="contenteditable"
-      v-bind:class="{ done: todo.done }"
-      @blur="updateName(todo.name, todo.timestamp)"
+    <input v-bind:class="{ done: todo.done }"
+      @change="updateName(todo.name, todo.timestamp)"
       v-model="todo.name" />
     <input type="checkbox"
       name="done"
@@ -50,7 +49,7 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 li {
   display: block;
   margin: 0 10px;
@@ -60,5 +59,10 @@ li {
 }
 .btn-sm {
   padding: 0 1px;
+}
+input {
+  border: none;
+  font-size: 16px;
+  color: #2c3e50;
 }
 </style>
