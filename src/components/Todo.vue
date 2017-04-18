@@ -2,17 +2,17 @@
   <li>
     {{ index + 1 }}.
     <input v-bind:class="{ done: todo.done }"
-      @change="updateName(todo.name, todo.timestamp)"
+      @change="updateTodo(todo)"
       v-model="todo.name" />
     <input type="checkbox"
       name="done"
       v-model="todo.done"
-      @change="updateStatus(todo.done, todo.timestamp)"/>
+      @change="updateTodo(todo)"/>
     <button type="button"
       name="removeTodoBtn"
       @click="removeTodo(todo.timestamp)"
       class="btn-sm">
-      Delete
+      &times;
     </button>
   </li>
 </template>
@@ -31,19 +31,8 @@ export default {
     removeTodo(timestamp) {
       this.$emit('deleteTodo', timestamp);
     },
-    updateName(name, timestamp) {
-      const obj = {
-        name,
-        timestamp,
-      };
-      this.$emit('updateTodoName', obj);
-    },
-    updateStatus(done, timestamp) {
-      const obj = {
-        done,
-        timestamp,
-      };
-      this.$emit('updateTodoStatus', obj);
+    updateTodo(todo) {
+      this.$emit('updateTodo', todo);
     },
   },
 };
@@ -58,7 +47,8 @@ li {
   text-decoration: line-through;
 }
 .btn-sm {
-  padding: 0 1px;
+  padding: 0 1px 1px;
+  line-height: 0;
 }
 input {
   border: none;

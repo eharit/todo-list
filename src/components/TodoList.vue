@@ -1,30 +1,50 @@
 <template>
   <div class="hello">
     <h1>{{ title }}</h1>
-    <input type="text" name="newTodo" placeholder="New todo" v-model="newTodoName" @keyup.enter="addTodo"/>
-    <button type="button" name="newTodoBtn" @click="addTodo">Add</button>
+    <input type="text"
+      name="newTodo"
+      placeholder="New todo"
+      v-model="newTodoName"
+      @keyup.enter="addTodo"/>
+    <button type="button"
+      name="newTodoBtn"
+      @click="addTodo">Add
+    </button>
     <p v-show="!todos.length">Nothing to do, yay!</p>
     <ul>
-      <to-do v-for="(todo, index) in todos"
-        is="to-do"
+      <todo v-for="(todo, index) in todos"
         :todo="todo"
         :index="index"
+        :key="todo.timestamp"
         @deleteTodo="removeTodo($event)"
-        @updateTodoName="updateName($event)"
-        @updateTodoStatus="updateStatus($event)">
-      </to-do>
+        @updateTodo="updateTodo($event)">
+      </todo>
     </ul>
     <pre v-if="this.log">{{ this.log }}</pre>
   </div>
 </template>
 
 <script>
-import Todo from './Todo';
+import Firebase from 'firebase';
+import todo from './Todo';
+
+const config = {
+  apiKey: 'AIzaSyB86W3_ICaXaIENuhAzuA-WCylzFr9cJhs',
+  authDomain: 'vue-todo-app-4c165.firebaseapp.com',
+  databaseURL: 'https://vue-todo-app-4c165.firebaseio.com',
+  projectId: 'vue-todo-app-4c165',
+  storageBucket: 'vue-todo-app-4c165.appspot.com',
+  messagingSenderId: '886610025376',
+};
+
+const app = Firebase.initializeApp(config);
+const db = app.database();
+const dbRef = db.ref('todos');
 
 export default {
   name: 'TodoList',
   components: {
-    'to-do': Todo,
+    todo,
   },
   data() {
     return {
@@ -32,6 +52,7 @@ export default {
       todos: JSON.parse(localStorage.getItem('todoList')) || [],
       newTodoName: '',
       log: '',
+      dbRef,
     };
   },
   methods: {
@@ -55,20 +76,12 @@ export default {
       this.todos.splice(index, 1);
       this.updateLocalStorage();
     },
-    updateName(data) {
+    updateTodo(data) {
       const obj = this.todos.find(
         n => n.timestamp === data.timestamp,
       );
       const index = this.todos.indexOf(obj);
-      this.todos[index].name = data.name;
-      this.updateLocalStorage();
-    },
-    updateStatus(data) {
-      const obj = this.todos.find(
-        n => n.timestamp === data.timestamp,
-      );
-      const index = this.todos.indexOf(obj);
-      this.todos[index].done = data.done;
+      this.todos[index] = data;
       this.updateLocalStorage();
     },
     updateLocalStorage() {
