@@ -15,7 +15,6 @@
       <todo v-for="(todo, index) in todos"
         :todo="todo"
         :index="index"
-        :key="todo.timestamp"
         @deleteTodo="removeTodo($event)"
         @updateTodo="updateTodo($event)">
       </todo>
@@ -39,7 +38,7 @@ const config = {
 
 const app = Firebase.initializeApp(config);
 const db = app.database();
-const dbRef = db.ref('todos');
+const todosRef = db.ref('todos');
 
 export default {
   name: 'TodoList',
@@ -49,43 +48,33 @@ export default {
   data() {
     return {
       title: 'Todo List',
-      todos: JSON.parse(localStorage.getItem('todoList')) || [],
       newTodoName: '',
       log: '',
-      dbRef,
     };
+  },
+  firebase: {
+    todos: todosRef,
   },
   methods: {
     addTodo() {
       if (this.newTodoName !== '') {
-        const tmpTodo = {
-          timestamp: new Date(),
+        const newTodo = {
+          timestamp: JSON.stringify(new Date()),
           name: this.newTodoName,
           done: false,
         };
-        this.todos.push(tmpTodo);
+        todosRef.push(newTodo);
         this.newTodoName = '';
-        this.updateLocalStorage();
       }
     },
-    removeTodo(timestamp) {
-      const obj = this.todos.find(
-        n => n.timestamp === timestamp,
-      );
-      const index = this.todos.indexOf(obj);
-      this.todos.splice(index, 1);
-      this.updateLocalStorage();
+    removeTodo(data) {
+      todosRef.child(data['.key']).remove();
     },
     updateTodo(data) {
-      const obj = this.todos.find(
-        n => n.timestamp === data.timestamp,
-      );
-      const index = this.todos.indexOf(obj);
-      this.todos[index] = data;
-      this.updateLocalStorage();
-    },
-    updateLocalStorage() {
-      localStorage.setItem('todoList', JSON.stringify(this.todos));
+      todosRef.child(data['.key']).update({
+        name: data.name,
+        done: data.done,
+      });
     },
   },
 };

@@ -10,7 +10,7 @@
       @change="updateTodo(todo)"/>
     <button type="button"
       name="removeTodoBtn"
-      @click="removeTodo(todo.timestamp)"
+      @click="removeTodo(todo)"
       class="btn-sm">
       &times;
     </button>
