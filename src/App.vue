@@ -1,6 +1,7 @@
 <template>
   <div id='app'>
     <img src='./assets/logo.png'>
+    <h1>Todo List</h1>
     <router-view></router-view>
   </div>
 </template>
@@ -21,5 +22,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin: 60px 10px;
+}
+h1, h2 {
+  font-weight: normal;
 }
 </style>

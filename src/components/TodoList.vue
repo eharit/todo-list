@@ -1,6 +1,5 @@
 <template>
   <div class="hello">
-    <h1>{{ title }}</h1>
     <input type="text"
       name="newTodo"
       placeholder="New todo"
@@ -11,7 +10,7 @@
       @click="addTodo">Add
     </button>
     <p v-show="!todos.length">Fetching Todos!</p>
-    <ul>
+    <draggable v-model="todos" :options="{}" @start="drag=true" @end="drag=false">
       <todo v-for="(todo, index) in todos"
         :todo="todo"
         :index="index"
@@ -19,7 +18,7 @@
         @deleteTodo="removeTodo($event)"
         @updateTodo="updateTodo($event)">
       </todo>
-    </ul>
+    </draggable>
     <footer class="footer" v-show="name">
       <span class="pic" alt="name" :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
       {{ name }}
@@ -32,6 +31,7 @@
 
 <script>
 import firebase from 'firebase';
+import draggable from 'vuedraggable';
 import todo from './Todo';
 import config from '../helpers/firebaseConfig';
 
@@ -43,6 +43,7 @@ export default {
   name: 'TodoList',
   components: {
     todo,
+    draggable,
   },
   data() {
     return {
@@ -98,9 +99,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
 
 ul {
   list-style-type: none;
@@ -110,6 +108,7 @@ ul {
 a {
   color: #42b983;
 }
+
 footer {
   position: fixed;
   bottom: 0;
@@ -118,6 +117,7 @@ footer {
   background-color: whitesmoke;
   padding: 5px;
 }
+
 footer .pic {
   background: whitesmoke;
   background-size: cover;
@@ -128,8 +128,10 @@ footer .pic {
   width: 40px;
   height: 40px;
 }
+
 .float-right {
   float: right;
   display: inline-block;
 }
+
 </style>
