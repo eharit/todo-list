@@ -10,33 +10,32 @@
       name="newTodoBtn"
       @click="addTodo">Add
     </button>
-    <p v-show="!todos.length">Nothing to do, yay!</p>
+    <p v-show="!todos.length">Fetching Todos!</p>
     <ul>
       <todo v-for="(todo, index) in todos"
         :todo="todo"
         :index="index"
+        :key="todo.timestamp"
         @deleteTodo="removeTodo($event)"
         @updateTodo="updateTodo($event)">
       </todo>
     </ul>
-    <pre v-if="this.log">{{ this.log }}</pre>
+    <footer class="footer" v-show="name">
+      <span class="pic" alt="name" :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
+      {{ name }}
+      <button type="button" name="button" @click="logOut">Sign out</button>
+    </footer>
+
+    <pre v-if="this.log != ''">{{ this.log }}</pre>
   </div>
 </template>
 
 <script>
-import Firebase from 'firebase';
+import firebase from 'firebase';
 import todo from './Todo';
+import config from '../helpers/firebaseConfig';
 
-const config = {
-  apiKey: 'AIzaSyB86W3_ICaXaIENuhAzuA-WCylzFr9cJhs',
-  authDomain: 'vue-todo-app-4c165.firebaseapp.com',
-  databaseURL: 'https://vue-todo-app-4c165.firebaseio.com',
-  projectId: 'vue-todo-app-4c165',
-  storageBucket: 'vue-todo-app-4c165.appspot.com',
-  messagingSenderId: '886610025376',
-};
-
-const app = Firebase.initializeApp(config);
+const app = firebase.initializeApp(config);
 const db = app.database();
 const todosRef = db.ref('todos');
 
@@ -49,13 +48,30 @@ export default {
     return {
       title: 'Todo List',
       newTodoName: '',
+      user: {},
       log: '',
+      photo: '',
+      userId: '',
+      name: '',
+      email: '',
     };
+  },
+  updated() {
+    this.user = firebase.auth().currentUser;
+    if (this.user) {
+      this.name = this.user.displayName;
+      this.email = this.user.email;
+      this.photo = this.user.photoURL;
+      this.userId = this.user.uid;
+    }
   },
   firebase: {
     todos: todosRef,
   },
   methods: {
+    logOut() {
+      firebase.auth().signOut();
+    },
     addTodo() {
       if (this.newTodoName !== '') {
         const newTodo = {
@@ -94,5 +110,26 @@ ul {
 a {
   color: #42b983;
 }
-
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: whitesmoke;
+  padding: 5px;
+}
+footer .pic {
+  background: whitesmoke;
+  background-size: cover;
+  display: inline-block;
+  border-radius: 20px;
+  border: 1px whitesmoke solid;
+  vertical-align: middle;
+  width: 40px;
+  height: 40px;
+}
+.float-right {
+  float: right;
+  display: inline-block;
+}
 </style>
