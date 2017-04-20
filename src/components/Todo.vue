@@ -1,19 +1,37 @@
 <template lang="html">
   <li>
-    {{ index + 1 }}.
-    <input v-bind:class="{ done: todo.done }"
-      @change="updateTodo(todo)"
-      v-model="todo.name" />
-    <input type="checkbox"
-      name="done"
-      v-model="todo.done"
-      @change="updateTodo(todo)"/>
-    <button type="button"
-      name="removeTodoBtn"
-      @click="removeTodo(todo)"
-      class="btn-sm">
-      &times;
-    </button>
+    <div class="input-group">
+
+      <div class="input-group-addon">
+        <i class="material-icons">&#xE25D;</i>
+      </div>
+
+      <div class="input-group-addon">
+        {{ index + 1 }}.
+      </div>
+
+      <input v-bind:class="{ done: todo.done, 'form-control': true }"
+        @change="updateTodo(todo)"
+        v-model="todo.name" />
+
+      <div class="input-group-addon">
+        <input
+          type="checkbox"
+          name="done"
+          v-model="todo.done"
+          @change="updateTodo(todo)"/>
+      </div>
+
+      <div class="input-group-addon">
+        <button type="button"
+          name="removeTodoBtn"
+          @click="removeTodo(todo)"
+          class="btn btn-link btn-sm">
+          &times;
+        </button>
+      </div>
+
+    </div>
   </li>
 </template>
 
@@ -46,13 +64,11 @@ li {
 .done {
   text-decoration: line-through;
 }
-.btn-sm {
-  padding: 0 1px 1px;
-  line-height: 0;
-}
-input {
+.noborder {
   border: none;
-  font-size: 16px;
-  color: #2c3e50;
+}
+.material-icons {
+  font-size: 20px;
+  cursor: grab;
 }
 </style>
