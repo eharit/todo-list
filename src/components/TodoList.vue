@@ -1,31 +1,50 @@
 <template>
-  <div class="hello">
-    <input type="text"
-      name="newTodo"
-      placeholder="New todo"
-      v-model="newTodoName"
-      @keyup.enter="addTodo"/>
-    <button type="button"
-      name="newTodoBtn"
-      @click="addTodo">Add
-    </button>
-    <p v-show="!todos.length">Fetching Todos!</p>
-    <draggable v-model="todos" :options="{}" @start="drag=true" @end="drag=false">
-      <todo v-for="(todo, index) in todos"
-        :todo="todo"
-        :index="index"
-        :key="todo.timestamp"
-        @deleteTodo="removeTodo($event)"
-        @updateTodo="updateTodo($event)">
-      </todo>
-    </draggable>
+  <div class="container">
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+          <input class="form-control"
+            type="text"
+            name="newTodo"
+            placeholder="New todo"
+            v-model="newTodoName"
+            @keyup.enter="addTodo"/>
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button"
+              name="newTodoBtn"
+              @click="addTodo">Add
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <hr/>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <p v-show="!todos.length">Fetching Todos!</p>
+        <draggable v-model="todos" @end="updateIndex()">
+          <todo v-for="(todo, index) in todos"
+            :todo="todo"
+            :index="index"
+            :key="todo.timestamp"
+            @deleteTodo="removeTodo($event)"
+            @updateTodo="updateTodo($event)">
+          </todo>
+        </draggable>
+      </div>
+    </div>
+
     <footer class="footer" v-show="name">
       <span class="pic" alt="name" :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
       {{ name }}
-      <button type="button" name="button" @click="logOut">Sign out</button>
+      <button class="btn btn-default" type="button" name="button" @click="logOut">Sign out</button>
     </footer>
 
     <pre v-if="this.log != ''">{{ this.log }}</pre>
+
   </div>
 </template>
 
@@ -49,12 +68,14 @@ export default {
     return {
       title: 'Todo List',
       newTodoName: '',
+      todos: [],
       user: {},
       log: '',
       photo: '',
       userId: '',
       name: '',
       email: '',
+      init: true,
     };
   },
   updated() {
@@ -65,6 +86,10 @@ export default {
       this.photo = this.user.photoURL;
       this.userId = this.user.uid;
     }
+    if (this.init) {
+      this.todos.sort((a, b) => parseInt(a.indx, 10) - parseInt(b.indx, 10));
+      this.init = false;
+    }
   },
   firebase: {
     todos: todosRef,
@@ -73,11 +98,18 @@ export default {
     logOut() {
       firebase.auth().signOut();
     },
+    updateIndex() {
+      this.todos.forEach((e, i) => {
+        e.indx = i;
+        this.updateTodo(e);
+      });
+    },
     addTodo() {
       if (this.newTodoName !== '') {
         const newTodo = {
-          timestamp: JSON.stringify(new Date()),
+          timestamp: JSON.stringify(new Date().getTime()),
           name: this.newTodoName,
+          indx: this.todos.length,
           done: false,
         };
         todosRef.push(newTodo);
@@ -91,6 +123,7 @@ export default {
       todosRef.child(data['.key']).update({
         name: data.name,
         done: data.done,
+        indx: data.indx,
       });
     },
   },
