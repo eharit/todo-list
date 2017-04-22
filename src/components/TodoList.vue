@@ -1,6 +1,12 @@
 <template>
   <div class="container">
 
+    <footer class="footer" v-show="name">
+      <span class="pic" alt="name" :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
+      {{ name }}
+      <button class="btn btn-default" type="button" name="button" @click="logOut">Sign out</button>
+    </footer>
+
     <div class="row">
       <div class="col-sm-12">
         <div class="input-group">
@@ -38,11 +44,7 @@
       </div>
     </div>
 
-    <footer class="footer" v-show="name">
-      <span class="pic" alt="name" :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
-      {{ name }}
-      <button class="btn btn-default" type="button" name="button" @click="logOut">Sign out</button>
-    </footer>
+
 
     <pre v-if="this.log != ''">{{ this.log }}</pre>
 
@@ -57,7 +59,7 @@ import config from '../helpers/firebaseConfig';
 
 const app = firebase.initializeApp(config);
 const db = app.database();
-const todosRef = db.ref('todos/rD2ye9CvO4Mt4d2N4spp2iQQ7y13');
+let todosRef;
 
 export default {
   name: 'TodoList',
@@ -70,7 +72,6 @@ export default {
       title: 'Todo List',
       newTodoName: '',
       todos: [],
-      userTodos: {},
       user: {},
       log: '',
       photo: '',
@@ -80,23 +81,32 @@ export default {
       init: true,
     };
   },
-  updated() {
-    if (this.init) {
-      this.user = firebase.auth().currentUser;
-      if (this.user) {
+  beforeCreate() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.user = user;
         this.name = this.user.displayName;
         this.email = this.user.email;
         this.photo = this.user.photoURL;
         this.userId = this.user.uid;
-        this.$log.log(this.todos);
+        todosRef = db.ref(`todos/${user.uid}`);
+        this.$bindAsArray('todos', todosRef);
       }
-
+    });
+  },
+  updated() {
+    if (this.init) {
+      // this.user = firebase.auth().currentUser;
+      // if (this.user) {
+      //   this.name = this.user.displayName;
+      //   this.email = this.user.email;
+      //   this.photo = this.user.photoURL;
+      //   this.userId = this.user.uid;
+      //   this.$log.log(this.todos);
+      // }
       this.todos.sort((a, b) => parseInt(a.indx, 10) - parseInt(b.indx, 10));
       this.init = false;
     }
-  },
-  firebase: {
-    todos: todosRef,
   },
   methods: {
     logOut() {
@@ -119,7 +129,7 @@ export default {
           indx: this.todos.length,
           done: false,
         };
-        todosRef.child(this.user.uid).push(newTodo);
+        todosRef.push(newTodo);
         this.newTodoName = '';
       }
     },
