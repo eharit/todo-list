@@ -3,18 +3,6 @@
     <div class="input-group">
 
       <div class="input-group-addon">
-        <i class="material-icons">&#xE25D;</i>
-      </div>
-
-      <div class="input-group-addon">
-        {{ index + 1 }}.
-      </div>
-
-      <input v-bind:class="{ done: todo.done, 'form-control': true }"
-        @change="updateTodo(todo)"
-        v-model="todo.name" />
-
-      <div class="input-group-addon">
         <input
           type="checkbox"
           name="done"
@@ -22,11 +10,15 @@
           @change="updateTodo(todo)"/>
       </div>
 
-      <div class="input-group-addon">
+      <input v-bind:class="{ done: todo.done, 'form-control': true }"
+        @change="updateTodo(todo)"
+        v-model="todo.name" />
+
+      <div class="input-group-btn">
         <button type="button"
           name="removeTodoBtn"
           @click="removeTodo(todo)"
-          class="btn btn-link btn-sm">
+          class="btn btn-secondary btn-sm">
           &times;
         </button>
       </div>
@@ -59,7 +51,8 @@ export default {
 <style lang="css" scoped>
 li {
   display: block;
-  margin: 0 10px;
+  margin-bottom: 5px;
+  cursor: grab;
 }
 .done {
   text-decoration: line-through;

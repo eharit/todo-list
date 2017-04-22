@@ -11,7 +11,8 @@
             v-model="newTodoName"
             @keyup.enter="addTodo"/>
           <span class="input-group-btn">
-            <button class="btn btn-primary" type="button"
+            <button class="btn btn-primary"
+              type="button"
               name="newTodoBtn"
               @click="addTodo">Add
             </button>
@@ -56,7 +57,7 @@ import config from '../helpers/firebaseConfig';
 
 const app = firebase.initializeApp(config);
 const db = app.database();
-const todosRef = db.ref('todos');
+const todosRef = db.ref('todos/rD2ye9CvO4Mt4d2N4spp2iQQ7y13');
 
 export default {
   name: 'TodoList',
@@ -69,6 +70,7 @@ export default {
       title: 'Todo List',
       newTodoName: '',
       todos: [],
+      userTodos: {},
       user: {},
       log: '',
       photo: '',
@@ -79,14 +81,16 @@ export default {
     };
   },
   updated() {
-    this.user = firebase.auth().currentUser;
-    if (this.user) {
-      this.name = this.user.displayName;
-      this.email = this.user.email;
-      this.photo = this.user.photoURL;
-      this.userId = this.user.uid;
-    }
     if (this.init) {
+      this.user = firebase.auth().currentUser;
+      if (this.user) {
+        this.name = this.user.displayName;
+        this.email = this.user.email;
+        this.photo = this.user.photoURL;
+        this.userId = this.user.uid;
+        this.$log.log(this.todos);
+      }
+
       this.todos.sort((a, b) => parseInt(a.indx, 10) - parseInt(b.indx, 10));
       this.init = false;
     }
@@ -100,11 +104,14 @@ export default {
     },
     updateIndex() {
       this.todos.forEach((e, i) => {
-        e.indx = i;
-        this.updateTodo(e);
+        todosRef.child(e['.key']).update({
+          indx: i,
+        });
       });
+      this.$log.log(this.todos);
     },
     addTodo() {
+      this.$log.log(this.todos);
       if (this.newTodoName !== '') {
         const newTodo = {
           timestamp: JSON.stringify(new Date().getTime()),
@@ -112,7 +119,7 @@ export default {
           indx: this.todos.length,
           done: false,
         };
-        todosRef.push(newTodo);
+        todosRef.child(this.user.uid).push(newTodo);
         this.newTodoName = '';
       }
     },
