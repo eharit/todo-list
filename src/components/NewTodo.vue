@@ -5,7 +5,7 @@
       name="newTodo"
       placeholder="New todo"
       v-model="newName"
-      @keyup.enter="addNewTodo"/>
+      @keyup.enter="addNewTodo(newName)"/>
     <span class="input-group-btn">
       <button class="btn btn-primary"
         type="button"

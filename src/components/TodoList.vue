@@ -25,14 +25,6 @@
       </div>
     </div>
 
-    <button type="button"
-      name="button"
-      class="btn
-      btn-info"
-      @click="updateIndex">
-      Test
-    </button>
-
     <td-footer
       :name="name" :photo="photo"
       @logOut="logOut">
@@ -82,7 +74,9 @@ export default {
       });
     },
     addNewTodo(newTodoName) {
-      if (newTodoName !== '') {
+      if (typeof newTodoName === 'object') {
+        this.$log.log(newTodoName);
+      } else if (newTodoName !== '') {
         const newTodo = {
           timestamp: JSON.stringify(new Date().getTime()),
           name: newTodoName,
