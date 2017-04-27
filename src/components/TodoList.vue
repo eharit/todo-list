@@ -3,14 +3,17 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <td-new-todo @newTodoAdded="addNewTodo($event)"></td-new-todo>
+        <td-new-todo
+          :loading="loading"
+          @newTodoAdded="addNewTodo($event)">
+        </td-new-todo>
       </div>
     </div>
 
     <hr/>
 
-    <td-spinner v-if="!todos.length && !loaded"></td-spinner>
-    <p v-if="!todos.length && loaded">No todos at the moment, why don't you add some?</p>
+    <td-spinner v-if="!todos.length && loading"></td-spinner>
+    <td-no-todos v-if="!todos.length && !loading">No todos at the moment, why don't you add some?</td-no-todos>
 
     <div class="row">
       <div class="col-sm-12">
@@ -18,6 +21,7 @@
           <td-todo v-for="(todo, index) in todos"
             :todo="todo"
             :index="index"
+            :loading="loading"
             :key="todo.timestamp"
             @deleteTodo="removeTodo($event)"
             @updateTodo="updateTodo($event)">
@@ -43,6 +47,7 @@ import Todo from './Todo';
 import NewTodo from './NewTodo';
 import Spinner from './Spinner';
 import Footer from './Footer';
+import NoTodos from './NoTodos';
 import config from '../helpers/firebaseConfig';
 
 const app = firebase.initializeApp(config);
@@ -54,7 +59,7 @@ export default {
     return {
       title: 'Todo List',
       todos: [],
-      loaded: false,
+      loading: true,
       user: {},
       log: '',
       photo: '',
@@ -79,6 +84,7 @@ export default {
       if (typeof newTodoName === 'object') {
         this.$log.log(newTodoName);
       } else if (newTodoName !== '') {
+        this.loading = true;
         const newTodo = {
           timestamp: JSON.stringify(new Date().getTime()),
           name: newTodoName,
@@ -87,16 +93,29 @@ export default {
         };
         todosRef.push(newTodo);
         this.$bindAsArray('todos', todosRef.orderByChild('indx'));
+        todosRef.once('value', () => {
+          this.loading = false;
+        });
       }
     },
     removeTodo(data) {
+      this.loading = true;
       todosRef.child(data['.key']).remove();
+      this.$bindAsArray('todos', todosRef.orderByChild('indx'));
+      todosRef.once('value', () => {
+        this.loading = false;
+      });
     },
     updateTodo(data) {
+      this.loading = true;
       todosRef.child(data['.key']).update({
         name: data.name,
         done: data.done,
         indx: data.indx,
+      });
+      this.$bindAsArray('todos', todosRef.orderByChild('indx'));
+      todosRef.once('value', () => {
+        this.loading = false;
       });
     },
   },
@@ -105,6 +124,7 @@ export default {
     'td-todo': Todo,
     'td-new-todo': NewTodo,
     'td-spinner': Spinner,
+    'td-no-todos': NoTodos,
     'td-draggable': Draggable,
     'td-footer': Footer,
   },
@@ -119,7 +139,7 @@ export default {
         todosRef = db.ref(`todos/${user.uid}`);
         this.$bindAsArray('todos', todosRef.orderByChild('indx'));
         db.ref(`todos/${user.uid}`).once('value', () => {
-          this.loaded = true;
+          this.loading = false;
         });
       }
     });

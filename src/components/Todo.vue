@@ -7,18 +7,21 @@
           type="checkbox"
           name="done"
           v-model="todo.done"
-          @change="updateTodo(todo)"/>
+          @change="updateTodo(todo)"
+          :disabled="loading"/>
       </div>
 
       <input v-bind:class="{ done: todo.done, 'form-control': true }"
         @change="updateTodo(todo)"
-        v-model="todo.name" />
+        v-model="todo.name"
+        :disabled="loading"/>
 
       <div class="input-group-btn">
         <button type="button"
           name="removeTodoBtn"
           @click="removeTodo(todo)"
-          class="btn btn-secondary btn-sm">
+          class="btn btn-secondary btn-sm"
+          :disabled="loading">
           &times;
         </button>
       </div>
@@ -30,7 +33,7 @@
 <script>
 export default {
   name: 'Todo',
-  props: ['todo', 'index'],
+  props: ['todo', 'index', 'loading'],
   data() {
     return {
       timestamp: null,

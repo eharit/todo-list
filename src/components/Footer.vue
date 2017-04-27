@@ -1,6 +1,6 @@
 <template lang="html">
   <footer class="footer" v-show="name">
-    <span class="pic" alt="name"
+    <span v-show="photo" class="pic" alt="name"
       :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
       {{ name }}
     <button class="btn btn-default" type="button" name="button"

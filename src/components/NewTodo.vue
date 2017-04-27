@@ -5,12 +5,14 @@
       name="newTodo"
       placeholder="New todo"
       v-model="newName"
-      @keyup.enter="addNewTodo(newName)"/>
+      @keyup.enter="addNewTodo(newName)"
+      :disabled="loading"/>
     <span class="input-group-btn">
       <button class="btn btn-primary"
         type="button"
         name="newTodoBtn"
-        @click="addNewTodo(newName)">Add
+        @click="addNewTodo(newName)"
+        :disabled="loading">Add
       </button>
     </span>
   </div>
@@ -23,6 +25,7 @@ export default {
       newName: '',
     };
   },
+  props: ['loading'],
   methods: {
     addNewTodo(newTodoName) {
       this.newName = '';
