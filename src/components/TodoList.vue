@@ -35,6 +35,10 @@
       @logOut="logOut">
     </td-footer>
 
+    <div v-if="!connected && !loading" class="alert alert-warning" role="alert">
+      <strong>Holy guacamole!</strong> You are offline.
+    </div>
+
     <pre v-if="this.log != ''">{{ this.log }}</pre>
 
   </div>
@@ -60,6 +64,7 @@ export default {
       title: 'Todo List',
       todos: [],
       loading: true,
+      connected: false,
       user: {},
       log: '',
       photo: '',
@@ -141,6 +146,21 @@ export default {
         db.ref(`todos/${user.uid}`).once('value', () => {
           this.loading = false;
         });
+        todosRef.onDisconnect(() => {
+          this.loading = true;
+        });
+      }
+    });
+  },
+  updated() {
+    const connectedRef = db.ref('.info/connected');
+    connectedRef.on('value', (snap) => {
+      if (snap.val() === true) {
+        this.$log.log('connected');
+        this.connected = true;
+      } else {
+        this.$log.log('not connected');
+        this.connected = false;
       }
     });
   },
@@ -155,5 +175,11 @@ ul {
 }
 a {
   color: #42b983;
+}
+.alert {
+  position: fixed!important;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 </style>

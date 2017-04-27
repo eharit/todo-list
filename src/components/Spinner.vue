@@ -3,8 +3,6 @@
     <div class="rect1"></div>
     <div class="rect2"></div>
     <div class="rect3"></div>
-    <div class="rect4"></div>
-    <div class="rect5"></div>
   </div>
 </template>
 
@@ -18,7 +16,7 @@ export default {
 .spinner {
   margin: 20px auto;
   width: 50px;
-  height: 20px;
+  height: 16px;
   text-align: center;
   font-size: 10px;
 }
