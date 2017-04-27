@@ -1,8 +1,10 @@
 <template lang="html">
   <footer class="footer" v-show="name">
-    <span class="pic" alt="name" :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
-    {{ name }}
-    <button class="btn btn-default" type="button" name="button" @click="logOut">Sign out</button>
+    <span class="pic" alt="name"
+      :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
+      {{ name }}
+    <button class="btn btn-default" type="button" name="button"
+      @click="logOut">Sign out</button>
   </footer>
 </template>
 

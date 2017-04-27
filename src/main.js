@@ -6,6 +6,7 @@ import firebase from 'firebase';
 import vueLogger from 'vue-logger';
 import BootstrapVue from 'bootstrap-vue';
 
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 

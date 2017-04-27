@@ -13,7 +13,7 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <td-draggable v-model="todos" @end="updateIndex()">
+        <td-draggable v-model="todos" @end="updateIndex">
           <td-todo v-for="(todo, index) in todos"
             :todo="todo"
             :index="index"
@@ -25,10 +25,18 @@
       </div>
     </div>
 
-    <td-footer @logOut="logOut">
-    </td-footer>
+    <button type="button"
+      name="button"
+      class="btn
+      btn-info"
+      @click="updateIndex">
+      Test
+    </button>
 
-    <td-footer :name="name" :photo="photo"></td-footer>
+    <td-footer
+      :name="name" :photo="photo"
+      @logOut="logOut">
+    </td-footer>
 
     <pre v-if="this.log != ''">{{ this.log }}</pre>
 
@@ -49,14 +57,6 @@ const db = app.database();
 let todosRef;
 
 export default {
-  name: 'TodoList',
-  components: {
-    'td-todo': Todo,
-    'td-new-todo': NewTodo,
-    'td-spinner': Spinner,
-    'td-draggable': Draggable,
-    'td-footer': Footer,
-  },
   data() {
     return {
       title: 'Todo List',
@@ -68,6 +68,49 @@ export default {
       name: '',
       email: '',
     };
+  },
+  methods: {
+    logOut() {
+      firebase.auth().signOut();
+    },
+    updateIndex() {
+      this.todos.forEach((e, i) => {
+        e.indx = i;
+        todosRef.child(e['.key']).update({
+          indx: i,
+        });
+      });
+    },
+    addNewTodo(newTodoName) {
+      if (newTodoName !== '') {
+        const newTodo = {
+          timestamp: JSON.stringify(new Date().getTime()),
+          name: newTodoName,
+          indx: this.todos.length,
+          done: false,
+        };
+        todosRef.push(newTodo);
+        this.$bindAsArray('todos', todosRef.orderByChild('indx'));
+      }
+    },
+    removeTodo(data) {
+      todosRef.child(data['.key']).remove();
+    },
+    updateTodo(data) {
+      todosRef.child(data['.key']).update({
+        name: data.name,
+        done: data.done,
+        indx: data.indx,
+      });
+    },
+  },
+  name: 'TodoList',
+  components: {
+    'td-todo': Todo,
+    'td-new-todo': NewTodo,
+    'td-spinner': Spinner,
+    'td-draggable': Draggable,
+    'td-footer': Footer,
   },
   beforeCreate() {
     firebase.auth().onAuthStateChanged((user) => {
@@ -81,44 +124,6 @@ export default {
         this.$bindAsArray('todos', todosRef.orderByChild('indx'));
       }
     });
-  },
-  updated() {
-
-  },
-  methods: {
-    logOut() {
-      firebase.auth().signOut();
-    },
-    updateIndex() {
-      this.todos.forEach((e, i) => {
-        todosRef.child(e['.key']).update({
-          indx: i,
-        });
-      });
-      this.$log.log(this.todos);
-    },
-    addNewTodo(newTodoName) {
-      this.$log.log(newTodoName);
-      if (newTodoName !== '') {
-        const newTodo = {
-          timestamp: JSON.stringify(new Date().getTime()),
-          name: newTodoName,
-          indx: this.todos.length,
-          done: false,
-        };
-        todosRef.push(newTodo);
-      }
-    },
-    removeTodo(data) {
-      todosRef.child(data['.key']).remove();
-    },
-    updateTodo(data) {
-      todosRef.child(data['.key']).update({
-        name: data.name,
-        done: data.done,
-        indx: data.indx,
-      });
-    },
   },
 };
 </script>

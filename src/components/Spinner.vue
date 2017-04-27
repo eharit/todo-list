@@ -18,7 +18,7 @@ export default {
 .spinner {
   margin: 20px auto;
   width: 50px;
-  height: 40px;
+  height: 20px;
   text-align: center;
   font-size: 10px;
 }
@@ -27,6 +27,7 @@ export default {
   background-color: #0275d8;
   height: 100%;
   width: 6px;
+  border-radius: 3px;
   display: inline-block;
 
   -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
