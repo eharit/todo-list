@@ -1,7 +1,7 @@
 <template>
   <div id='app'>
     <img src='./assets/logo.png'>
-    <h1>Tudu</h1>
+    <h1>{{ appName }}</h1>
     <router-view></router-view>
   </div>
 </template>
@@ -10,6 +10,11 @@
 
 export default {
   name: 'app',
+  data() {
+    return {
+      appName: 'Todo',
+    };
+  },
 };
 </script>
 

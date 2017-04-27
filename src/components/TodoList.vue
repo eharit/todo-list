@@ -1,37 +1,18 @@
 <template>
   <div class="container">
 
-    <footer class="footer" v-show="name">
-      <span class="pic" alt="name" :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
-      {{ name }}
-      <button class="btn btn-default" type="button" name="button" @click="logOut">Sign out</button>
-    </footer>
-
     <div class="row">
       <div class="col-sm-12">
-        <div class="input-group">
-          <input class="form-control"
-            type="text"
-            name="newTodo"
-            placeholder="New todo"
-            v-model="newTodoName"
-            @keyup.enter="addTodo"/>
-          <span class="input-group-btn">
-            <button class="btn btn-primary"
-              type="button"
-              name="newTodoBtn"
-              @click="addTodo">Add
-            </button>
-          </span>
-        </div>
+        <new-todo @newTodoAdded="addNewTodo($event)"></new-todo>
       </div>
     </div>
 
     <hr/>
 
+    <spinner v-if="!todos.length"></spinner>
+
     <div class="row">
       <div class="col-sm-12">
-        <p v-show="!todos.length">Fetching Todos!</p>
         <draggable v-model="todos" @end="updateIndex()">
           <todo v-for="(todo, index) in todos"
             :todo="todo"
@@ -44,7 +25,11 @@
       </div>
     </div>
 
-
+    <footer class="footer" v-show="name">
+      <span class="pic" alt="name" :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
+      {{ name }}
+      <button class="btn btn-default" type="button" name="button" @click="logOut">Sign out</button>
+    </footer>
 
     <pre v-if="this.log != ''">{{ this.log }}</pre>
 
@@ -53,8 +38,10 @@
 
 <script>
 import firebase from 'firebase';
-import draggable from 'vuedraggable';
-import todo from './Todo';
+import Draggable from 'vuedraggable';
+import Todo from './Todo';
+import NewTodo from './NewTodo';
+import Spinner from './Spinner';
 import config from '../helpers/firebaseConfig';
 
 const app = firebase.initializeApp(config);
@@ -64,13 +51,14 @@ let todosRef;
 export default {
   name: 'TodoList',
   components: {
-    todo,
-    draggable,
+    todo: Todo,
+    'new-todo': NewTodo,
+    spinner: Spinner,
+    draggable: Draggable,
   },
   data() {
     return {
       title: 'Todo List',
-      newTodoName: '',
       todos: [],
       user: {},
       log: '',
@@ -78,7 +66,6 @@ export default {
       userId: '',
       name: '',
       email: '',
-      init: true,
     };
   },
   beforeCreate() {
@@ -90,23 +77,12 @@ export default {
         this.photo = this.user.photoURL;
         this.userId = this.user.uid;
         todosRef = db.ref(`todos/${user.uid}`);
-        this.$bindAsArray('todos', todosRef);
+        this.$bindAsArray('todos', todosRef.orderByChild('indx'));
       }
     });
   },
   updated() {
-    if (this.init) {
-      // this.user = firebase.auth().currentUser;
-      // if (this.user) {
-      //   this.name = this.user.displayName;
-      //   this.email = this.user.email;
-      //   this.photo = this.user.photoURL;
-      //   this.userId = this.user.uid;
-      //   this.$log.log(this.todos);
-      // }
-      this.todos.sort((a, b) => parseInt(a.indx, 10) - parseInt(b.indx, 10));
-      this.init = false;
-    }
+
   },
   methods: {
     logOut() {
@@ -120,17 +96,16 @@ export default {
       });
       this.$log.log(this.todos);
     },
-    addTodo() {
-      this.$log.log(this.todos);
-      if (this.newTodoName !== '') {
+    addNewTodo(newTodoName) {
+      this.$log.log(newTodoName);
+      if (newTodoName !== '') {
         const newTodo = {
           timestamp: JSON.stringify(new Date().getTime()),
-          name: this.newTodoName,
+          name: newTodoName,
           indx: this.todos.length,
           done: false,
         };
         todosRef.push(newTodo);
-        this.newTodoName = '';
       }
     },
     removeTodo(data) {
@@ -166,10 +141,11 @@ footer {
   width: 100%;
   background-color: whitesmoke;
   padding: 5px;
+  z-index: 2;
 }
 
 footer .pic {
-  background: whitesmoke;
+  background: white;
   background-size: cover;
   display: inline-block;
   border-radius: 20px;
