@@ -87,7 +87,7 @@ export default {
     },
     addNewTodo(newTodoName) {
       if (typeof newTodoName === 'object') {
-        this.$log.log(newTodoName);
+        // this.$log.log(newTodoName);
       } else if (newTodoName !== '') {
         this.loading = true;
         const newTodo = {
@@ -156,10 +156,10 @@ export default {
     const connectedRef = db.ref('.info/connected');
     connectedRef.on('value', (snap) => {
       if (snap.val() === true) {
-        this.$log.log('connected');
+        // this.$log.log('connected');
         this.connected = true;
       } else {
-        this.$log.log('not connected');
+        // this.$log.log('not connected');
         this.connected = false;
       }
     });
