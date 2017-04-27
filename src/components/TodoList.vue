@@ -9,7 +9,8 @@
 
     <hr/>
 
-    <td-spinner v-if="!todos.length"></td-spinner>
+    <td-spinner v-if="!todos.length && !loaded"></td-spinner>
+    <p v-if="!todos.length && loaded">No todos at the moment, why don't you add some?</p>
 
     <div class="row">
       <div class="col-sm-12">
@@ -53,6 +54,7 @@ export default {
     return {
       title: 'Todo List',
       todos: [],
+      loaded: false,
       user: {},
       log: '',
       photo: '',
@@ -116,6 +118,9 @@ export default {
         this.userId = this.user.uid;
         todosRef = db.ref(`todos/${user.uid}`);
         this.$bindAsArray('todos', todosRef.orderByChild('indx'));
+        db.ref(`todos/${user.uid}`).once('value', () => {
+          this.loaded = true;
+        });
       }
     });
   },
