@@ -3,33 +3,32 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <new-todo @newTodoAdded="addNewTodo($event)"></new-todo>
+        <td-new-todo @newTodoAdded="addNewTodo($event)"></td-new-todo>
       </div>
     </div>
 
     <hr/>
 
-    <spinner v-if="!todos.length"></spinner>
+    <td-spinner v-if="!todos.length"></td-spinner>
 
     <div class="row">
       <div class="col-sm-12">
-        <draggable v-model="todos" @end="updateIndex()">
-          <todo v-for="(todo, index) in todos"
+        <td-draggable v-model="todos" @end="updateIndex()">
+          <td-todo v-for="(todo, index) in todos"
             :todo="todo"
             :index="index"
             :key="todo.timestamp"
             @deleteTodo="removeTodo($event)"
             @updateTodo="updateTodo($event)">
-          </todo>
-        </draggable>
+          </td-todo>
+        </td-draggable>
       </div>
     </div>
 
-    <footer class="footer" v-show="name">
-      <span class="pic" alt="name" :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
-      {{ name }}
-      <button class="btn btn-default" type="button" name="button" @click="logOut">Sign out</button>
-    </footer>
+    <td-footer @logOut="logOut">
+    </td-footer>
+
+    <td-footer :name="name" :photo="photo"></td-footer>
 
     <pre v-if="this.log != ''">{{ this.log }}</pre>
 
@@ -42,6 +41,7 @@ import Draggable from 'vuedraggable';
 import Todo from './Todo';
 import NewTodo from './NewTodo';
 import Spinner from './Spinner';
+import Footer from './Footer';
 import config from '../helpers/firebaseConfig';
 
 const app = firebase.initializeApp(config);
@@ -51,10 +51,11 @@ let todosRef;
 export default {
   name: 'TodoList',
   components: {
-    todo: Todo,
-    'new-todo': NewTodo,
-    spinner: Spinner,
-    draggable: Draggable,
+    'td-todo': Todo,
+    'td-new-todo': NewTodo,
+    'td-spinner': Spinner,
+    'td-draggable': Draggable,
+    'td-footer': Footer,
   },
   data() {
     return {
@@ -124,40 +125,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 ul {
   list-style-type: none;
   padding: 0;
 }
-
 a {
   color: #42b983;
 }
-
-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: whitesmoke;
-  padding: 5px;
-  z-index: 2;
-}
-
-footer .pic {
-  background: white;
-  background-size: cover;
-  display: inline-block;
-  border-radius: 20px;
-  border: 1px whitesmoke solid;
-  vertical-align: middle;
-  width: 40px;
-  height: 40px;
-}
-
-.float-right {
-  float: right;
-  display: inline-block;
-}
-
 </style>
