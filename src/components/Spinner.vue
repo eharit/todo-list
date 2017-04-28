@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="spinner">
+  <div class="spinner" v-once>
     <div class="rect1"></div>
     <div class="rect2"></div>
     <div class="rect3"></div>

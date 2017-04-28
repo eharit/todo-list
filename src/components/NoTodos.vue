@@ -1,5 +1,5 @@
 <template lang="html">
-  <p>No todos at the moment, let's add some.</p>
+  <p v-once>No todos at the moment, let's add some.</p>
 </template>
 
 <script>

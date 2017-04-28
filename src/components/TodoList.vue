@@ -46,7 +46,7 @@
 
 <script>
 import firebase from 'firebase';
-import Draggable from 'vuedraggable';
+// import Draggable from 'vuedraggable';
 import Todo from './Todo';
 import NewTodo from './NewTodo';
 import Spinner from './Spinner';
@@ -130,7 +130,7 @@ export default {
     'td-new-todo': NewTodo,
     'td-spinner': Spinner,
     'td-no-todos': NoTodos,
-    'td-draggable': Draggable,
+    'td-draggable': () => import('vuedraggable'),
     'td-footer': Footer,
   },
   beforeCreate() {

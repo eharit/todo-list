@@ -4,7 +4,6 @@ import Vue from 'vue';
 import VueFire from 'vuefire';
 import firebase from 'firebase';
 // import vueLogger from 'vue-logger';
-import BootstrapVue from 'bootstrap-vue';
 
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -17,6 +16,10 @@ import App from './App';
 import router from './router';
 
 require('firebaseui/dist/firebaseui.css');
+
+// const VueFire = () => import('vuefire');
+// const firebase = () => import('firebase');
+const BootstrapVue = () => import('bootstrap-vue');
 
 Vue.config.productionTip = false;
 Vue.use(VueFire);
