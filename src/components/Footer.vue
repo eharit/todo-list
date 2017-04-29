@@ -1,26 +1,42 @@
 <template lang="html">
   <footer class="footer" v-show="name">
-    <span v-show="photo" class="pic" alt="name"
-      :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
-      {{ name }}
-    <button class="btn btn-secondary btn-sm" type="button" name="button"
-      @click="logOut">Sign out</button>
+    <div class="container">
+      <div class="row">
+        <div class="col text-left">
+          <span v-show="photo" class="pic" alt="name"
+            :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
+            {{ name }}
+        </div>
+        <div class="col text-right">
+          <button v-if="undos" class="btn btn-link btn-sm vertical-middle" type="button" name="button"
+            @click="undoTodo"><i class="material-icons">&#xE042;</i><span class="badge badge-danger">{{ undos }}</span></button>
+          <button class="btn btn-secondary btn-sm" type="button" name="button"
+            @click="logOut">Sign out</button>
+        </div>
+      </div>
+    </div>
   </footer>
 </template>
 
 <script>
 export default {
   name: 'Footer',
-  props: ['name', 'photo'],
+  props: ['name', 'photo', 'undos'],
   methods: {
     logOut() {
       this.$emit('logOut');
+    },
+    undoTodo() {
+      this.$emit('undoTodo');
     },
   },
 };
 </script>
 
 <style lang="css" scoped>
+.material-icons {
+  vertical-align: top;
+}
 footer {
   position: fixed;
   bottom: 0;
@@ -40,8 +56,7 @@ footer .pic {
   width: 40px;
   height: 40px;
 }
-.float-right {
-  float: right;
-  display: inline-block;
+button {
+  vertical-align: middle;
 }
 </style>

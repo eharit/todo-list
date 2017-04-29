@@ -34,8 +34,8 @@
     </transition>
 
     <td-footer
-      :name="name" :photo="photo"
-      @logOut="logOut">
+      :name="name" :photo="photo" :undos="trash.length"
+      @logOut="logOut" @undoTodo="undoTodo">
     </td-footer>
 
     <transition name="fade">
@@ -45,7 +45,6 @@
     </transition>
 
     <pre v-if="this.log != ''">{{ this.log }}</pre>
-    <button v-if="trash.length" class="btn btn-secondary" type="button" name="button" @click="undoTodo">undo ({{ trash.length }})</button>
 
   </div>
 </template>
