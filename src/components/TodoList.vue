@@ -12,39 +12,46 @@
 
     <hr/>
 
-    <td-spinner v-if="!todos.length && loading"></td-spinner>
-    <td-no-todos v-if="!todos.length && !loading">No todos at the moment, why don't you add some?</td-no-todos>
-
-    <div class="row">
-      <div class="col-sm-12">
-        <td-draggable v-model="todos" @end="updateIndex">
-          <td-todo v-for="(todo, index) in todos"
-            :todo="todo"
-            :index="index"
-            :loading="loading"
-            :key="todo.timestamp"
-            @deleteTodo="removeTodo($event)"
-            @updateTodo="updateTodo($event)">
-          </td-todo>
-        </td-draggable>
+    <transition name="fade" mode="out-in" duration="125">
+      <div class="row" v-if="todos.length && !loading">
+        <div class="col-sm-12">
+            <td-draggable v-model="todos" @end="updateIndex">
+              <td-todo v-for="(todo, index) in filteredTodos"
+                :todo="todo"
+                :index="index"
+                :loading="loading"
+                :key="todo.timestamp"
+                @deleteTodo="removeTodo($event)"
+                @updateTodo="updateTodo($event)">
+              </td-todo>
+            </td-draggable>
+        </div>
       </div>
-    </div>
+      <td-spinner v-else-if="!todos.length && loading"></td-spinner>
+      <td-no-todos v-else-if="!todos.length && !loading">
+        No todos at the moment, why don't you add some?
+      </td-no-todos>
+    </transition>
 
     <td-footer
       :name="name" :photo="photo"
       @logOut="logOut">
     </td-footer>
 
-    <div v-if="!connected && !loading" class="alert alert-warning" role="alert">
-      <strong>Holy guacamole!</strong> You are offline.
-    </div>
+    <transition name="fade">
+      <div v-if="!connected && !loading" class="alert alert-warning" role="alert">
+        <strong>Holy guacamole!</strong> You are offline.
+      </div>
+    </transition>
 
     <pre v-if="this.log != ''">{{ this.log }}</pre>
+    <button v-if="trash.length" class="btn btn-secondary" type="button" name="button" @click="undoTodo">undo ({{ trash.length }})</button>
 
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
 import firebase from 'firebase';
 // import Draggable from 'vuedraggable';
 import Todo from './Todo';
@@ -57,6 +64,7 @@ import config from '../helpers/firebaseConfig';
 const app = firebase.initializeApp(config);
 const db = app.database();
 let todosRef;
+let trashRef;
 
 export default {
   data() {
@@ -71,7 +79,16 @@ export default {
       userId: '',
       name: '',
       email: '',
+      trash: [],
     };
+  },
+  computed: {
+    filteredTodos() {
+      return this.todos;
+    },
+    undoable() {
+      return this.trash.length > 0;
+    },
   },
   methods: {
     logOut() {
@@ -93,7 +110,7 @@ export default {
         const newTodo = {
           timestamp: JSON.stringify(new Date().getTime()),
           name: newTodoName,
-          indx: this.todos.length,
+          indx: this.filteredTodos.length,
           done: false,
         };
         todosRef.push(newTodo);
@@ -106,10 +123,21 @@ export default {
     removeTodo(data) {
       this.loading = true;
       todosRef.child(data['.key']).remove();
+      Vue.delete(data, '.key');
+      trashRef.push(data);
       this.$bindAsArray('todos', todosRef.orderByChild('indx'));
       todosRef.once('value', () => {
         this.loading = false;
       });
+    },
+    undoTodo() {
+      if (this.undoable) {
+        const data = this.trash.pop();
+        trashRef.child(data['.key']).remove();
+        this.$bindAsArray('trash', trashRef);
+        Vue.delete(data, '.key');
+        todosRef.push(data);
+      }
     },
     updateTodo(data) {
       this.loading = true;
@@ -142,7 +170,9 @@ export default {
         this.photo = this.user.photoURL;
         this.userId = this.user.uid;
         todosRef = db.ref(`todos/${user.uid}`);
+        trashRef = db.ref(`trash/${user.uid}`);
         this.$bindAsArray('todos', todosRef.orderByChild('indx'));
+        this.$bindAsArray('trash', trashRef);
         db.ref(`todos/${user.uid}`).once('value', () => {
           this.loading = false;
         });
@@ -181,5 +211,11 @@ a {
   top: 0;
   left: 0;
   width: 100%;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0
 }
 </style>

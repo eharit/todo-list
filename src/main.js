@@ -3,7 +3,8 @@
 import Vue from 'vue';
 import VueFire from 'vuefire';
 import firebase from 'firebase';
-// import vueLogger from 'vue-logger';
+import Vuex from 'vuex';
+import vueLogger from 'vue-logger';
 
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -23,8 +24,9 @@ const BootstrapVue = () => import('bootstrap-vue');
 
 Vue.config.productionTip = false;
 Vue.use(VueFire);
-// Vue.use(vueLogger, { prefix: new Date(), dev: true });
+Vue.use(vueLogger, { prefix: new Date(), dev: true });
 Vue.use(BootstrapVue);
+Vue.use(Vuex);
 // const todosRef = Firebase('https://vue-todo-app-4c165.firebaseio.com/');
 
 /* eslint-disable no-new */

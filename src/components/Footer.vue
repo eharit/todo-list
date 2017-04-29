@@ -3,7 +3,7 @@
     <span v-show="photo" class="pic" alt="name"
       :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
       {{ name }}
-    <button class="btn btn-default" type="button" name="button"
+    <button class="btn btn-secondary btn-sm" type="button" name="button"
       @click="logOut">Sign out</button>
   </footer>
 </template>

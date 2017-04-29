@@ -3,7 +3,6 @@ import Router from 'vue-router';
 import TodoList from '@/components/TodoList';
 import Auth from '@/components/Auth';
 
-
 Vue.use(Router);
 
 export default new Router({

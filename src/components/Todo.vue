@@ -1,33 +1,33 @@
 <template lang="html">
-  <li>
-    <div class="input-group">
+  <transition name="fade" duration="125">
+    <li>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <input
+            type="checkbox"
+            name="done"
+            v-model="todo.done"
+            @change="updateTodo(todo)"
+            :disabled="loading"/>
+        </div>
 
-      <div class="input-group-addon">
-        <input
-          type="checkbox"
-          name="done"
-          v-model="todo.done"
+        <input v-bind:class="{ done: todo.done, 'form-control': true }"
           @change="updateTodo(todo)"
+          v-model="todo.name"
           :disabled="loading"/>
+
+        <div class="input-group-btn">
+          <button type="button"
+            name="removeTodoBtn"
+            @click="removeTodo(todo)"
+            class="btn btn-secondary btn-sm"
+            :disabled="loading">
+            &times;
+          </button>
+        </div>
       </div>
-
-      <input v-bind:class="{ done: todo.done, 'form-control': true }"
-        @change="updateTodo(todo)"
-        v-model="todo.name"
-        :disabled="loading"/>
-
-      <div class="input-group-btn">
-        <button type="button"
-          name="removeTodoBtn"
-          @click="removeTodo(todo)"
-          class="btn btn-secondary btn-sm"
-          :disabled="loading">
-          &times;
-        </button>
-      </div>
-
-    </div>
-  </li>
+    </li>
+  </transition>
 </template>
 
 <script>

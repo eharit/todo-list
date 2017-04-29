@@ -1,9 +1,11 @@
 <template>
-  <div id='app'>
-    <img src='./assets/logo.png'>
-    <h1>{{ appName }}</h1>
-    <router-view></router-view>
-  </div>
+  <transition appear>
+    <div id='app'>
+      <img src='./assets/logo.png' width="80" height="80">
+      <h1>{{ appName }}</h1>
+      <router-view></router-view>
+    </div>
+  </transition>
 </template>
 
 <script>
