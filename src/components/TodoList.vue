@@ -35,7 +35,7 @@
 
     <td-footer
       :name="name" :photo="photo" :undos="trash.length"
-      @logOut="logOut" @undoTodo="undoTodo">
+      @logOut="logOut" @undoTodo="undoTodo" @emptyTrash="emptyTrash">
     </td-footer>
 
     <transition name="fade">
@@ -150,6 +150,10 @@ export default {
         this.loading = false;
       });
     },
+    emptyTrash() {
+      trashRef.remove();
+      this.$bindAsArray('trash', trashRef);
+    },
   },
   name: 'TodoList',
   components: {
@@ -210,6 +214,7 @@ a {
   top: 0;
   left: 0;
   width: 100%;
+  margin: 0;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s
