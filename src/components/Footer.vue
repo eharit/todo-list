@@ -2,7 +2,7 @@
   <footer class="footer" v-show="name">
     <div class="container">
       <div class="row">
-        <div class="col text-left">
+        <div class="col-1 text-left">
           <span v-show="photo" class="pic" :alt="name" :title="name"
             :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
         </div>

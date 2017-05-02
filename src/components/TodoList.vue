@@ -2,7 +2,7 @@
   <div class="container">
 
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col">
         <td-new-todo
           :loading="loading"
           @newTodoAdded="addNewTodo($event)">
@@ -14,7 +14,7 @@
 
     <transition name="fade" mode="out-in" duration="125">
       <div class="row" v-if="todos.length && !loading">
-        <div class="col-sm-12">
+        <div class="col">
             <td-draggable v-model="todos" @end="updateIndex">
               <td-todo v-for="(todo, index) in filteredTodos"
                 :todo="todo"
