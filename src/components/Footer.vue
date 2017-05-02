@@ -12,16 +12,16 @@
           <!-- <button class="btn btn-secondary btn-sm" type="button" name="button"
             @click="logOut">Sign out</button> -->
 
-          <!-- <b-dropdown text="name" right="true">
+          <b-dropdown :text="name" :right="true" :dropup="true">
             <b-dropdown-item @click="logOut">
               Sign out
             </b-dropdown-item>
             <b-dropdown-item v-if="undos" @click="emptyTrash">
               Purge undo list
             </b-dropdown-item>
-          </b-dropdown> -->
+          </b-dropdown>
 
-          <div class="dropdown dropup">
+          <!-- <div class="dropdown dropup">
             <button @click="toggleDropdown"
               class="btn btn-link"
               type="button" id="dropdownMenuButton"
@@ -32,7 +32,7 @@
               <a class="dropdown-item" @click="logOut">Sign out</a>
               <a class="dropdown-item" v-if="undos" @click="emptyTrash">Clear undos</a>
             </div>
-          </div>
+          </div> -->
 
         </div>
       </div>
