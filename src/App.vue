@@ -1,8 +1,10 @@
 <template>
   <transition appear>
     <div id='app'>
-      <img src='./assets/logo.png' width="80" height="80">
-      <h1>{{ appName }}</h1>
+      <h1>
+        <img src='./assets/logo.png' width="40" height="40">
+        {{ appName }}
+      </h1>
       <router-view></router-view>
     </div>
   </transition>
@@ -28,7 +30,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin: 60px 10px;
+  margin: 20px 10px 60px;
 }
 h1, h2 {
   font-weight: normal;
