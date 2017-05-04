@@ -2,7 +2,7 @@
   <transition appear>
     <div id='app'>
       <h1>
-        <img src='./assets/logo.png' width="40" height="40">
+        <img src='./assets/logo.png' width="35" height="35">
         {{ appName }}
       </h1>
       <router-view></router-view>
@@ -34,5 +34,8 @@ export default {
 }
 h1, h2 {
   font-weight: normal;
+}
+img {
+  vertical-align: initial;
 }
 </style>

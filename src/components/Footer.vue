@@ -2,17 +2,15 @@
   <footer class="footer" v-show="name">
     <div class="container">
       <div class="row">
-        <div class="col-1 text-left">
-          <span v-show="photo" class="pic" :alt="name" :title="name"
-            :style="{ backgroundImage: 'url(' + photo + ')' }"></span>
-        </div>
-        <div class="col text-right">
-          <button :disabled="!undos" class="btn btn-link btn-sm vertical-middle" type="button" name="button"
-            @click="undoTodo"><span v-if="undos" class="badge badge-danger">{{ undos }}</span><i class="material-icons">&#xE042;</i></button>
-          <!-- <button class="btn btn-secondary btn-sm" type="button" name="button"
-            @click="logOut">Sign out</button> -->
-
-          <b-dropdown :text="name" :right="true" :dropup="true">
+        <div class="col-3 text-left">
+          <b-dropdown :right="false" :dropup="true" variant="link">
+            <span slot="text"
+              class="pic" :alt="name" :title="name"
+              :style="{ backgroundImage: 'url(' + photo + ')' }"
+              id="dropdownMenuButton"
+              aria-haspopup="true"
+              aria-expanded="false">
+            </span>
             <b-dropdown-item @click="logOut">
               Sign out
             </b-dropdown-item>
@@ -20,6 +18,11 @@
               Purge undo list
             </b-dropdown-item>
           </b-dropdown>
+        </div>
+
+        <div class="col text-right">
+          <button :disabled="!undos" class="btn btn-link btn-sm vertical-middle" type="button" name="button"
+            @click="undoTodo"><span v-if="undos" class="badge badge-danger">{{ undos }}</span><i class="material-icons">&#xE042;</i></button>
 
           <!-- <div class="dropdown dropup">
             <button @click="toggleDropdown"
@@ -33,7 +36,7 @@
               <a class="dropdown-item" v-if="undos" @click="emptyTrash">Clear undos</a>
             </div>
           </div> -->
-          
+
         </div>
       </div>
     </div>
@@ -78,7 +81,7 @@ export default {
   vertical-align: top;
 }
 .btn{
-  padding: 0.5rem 0.2rem;
+  padding: 1.1rem 0.2rem 1rem;
 }
 footer {
   position: fixed;
@@ -90,7 +93,7 @@ footer {
   z-index: 2;
 }
 footer .pic {
-  background: white;
+  background: #444;
   background-size: cover;
   display: inline-block;
   border-radius: 20px;

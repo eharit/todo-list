@@ -16,7 +16,7 @@
       <div class="row" v-if="todos.length && !loading">
         <div class="col">
             <td-draggable v-model="todos" @end="updateIndex">
-              <td-todo 
+              <td-todo
                 v-for="(todo, index) in filteredTodos"
                 :todo="todo"
                 :index="index"

@@ -11,7 +11,7 @@
             :disabled="loading"/>
         </div>
 
-        <input v-bind:class="{ done: todo.done, 'form-control': true }"
+        <input :class="{ done: todo.done, 'form-control': true }"
           @change="updateTodo(todo)"
           v-model="todo.name"
           :disabled="loading"/>

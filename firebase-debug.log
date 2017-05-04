@@ -1,0 +1,75 @@
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /Users/pla/.nvm/versions/node/v7.4.0/bin/node /Users/pla/.nvm/versions/node/v7.4.0/bin/firebase deploy
+[debug] CLI Version:  3.6.1
+[debug] Platform:     darwin
+[debug] Node Version: v7.4.0
+[debug] Time:         Thu May 04 2017 07:06:16 GMT+0100 (BST)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[debug] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/-Lmsr85WyeWVpTzfDQuItOUt5P19rg0bWFQm4fA8pxh2sRPGJjq6ZGHDdGLMtifj',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Thu May 04 2017 07:06:16 GMT+0100 (BST)
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/vue-todo-app-4c165  
+ Thu May 04 2017 07:06:16 GMT+0100 (BST)
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/vue-todo-app-4c165/tokens  
+ Thu May 04 2017 07:06:17 GMT+0100 (BST)
+[debug] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'vue-todo-app-4c165'...
+[info] 
+[info] i  deploying database, functions, hosting
+[info] ✔  database: rules ready to deploy.
+[debug] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "dependencies": {
+    "firebase-admin": "~4.1.2",
+    "firebase-functions": "^0.5"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[info] i  runtimeconfig: ensuring necessary APIs are enabled...
+[debug] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/vue-todo-app-4c165?view=CONSUMER_VIEW  
+ Thu May 04 2017 07:06:19 GMT+0100 (BST)
+[debug] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/vue-todo-app-4c165?view=CONSUMER_VIEW  
+ Thu May 04 2017 07:06:19 GMT+0100 (BST)
+[debug] <<< HTTP RESPONSE 200
+[info] ✔  runtimeconfig: all necessary APIs are enabled
+[debug] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/vue-todo-app-4c165  
+ Thu May 04 2017 07:06:20 GMT+0100 (BST)
+[debug] >>> HTTP REQUEST GET https://apikeys.googleapis.com/v1/projects/vue-todo-app-4c165/apiKeys  
+ Thu May 04 2017 07:06:20 GMT+0100 (BST)
+[debug] <<< HTTP RESPONSE 200
+[debug] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[debug] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/vue-todo-app-4c165/configs  
+ Thu May 04 2017 07:06:22 GMT+0100 (BST)
+[debug] <<< HTTP RESPONSE 200
+[debug] > [functions] runtime config materialized as: {
+  "firebase": {
+    "databaseURL": "https://vue-todo-app-4c165.firebaseio.com",
+    "storageBucket": "vue-todo-app-4c165.appspot.com",
+    "apiKey": "AIzaSyC4p4p4GKmbmhHziFjwsPQ9c4p1dM2RuRQ",
+    "authDomain": "vue-todo-app-4c165.firebaseapp.com"
+  }
+}
+[debug] > [functions] parsed triggers: []
+[info] i  hosting: preparing dist directory for upload...
+[debug] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/vue-todo-app-4c165/uploads/-KjH3Ez_GrKvzyH4ZQiD?fileCount=13&message=  
+ Thu May 04 2017 07:06:23 GMT+0100 (BST)
+[debug] <<< HTTP RESPONSE 200
+[debug] [hosting] .tgz uploaded successfully, waiting for extraction
+[info] ✔  hosting: 13 files uploaded successfully
+[info] i  starting release process (may take several minutes)...
+[debug] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/projects/vue-todo-app-4c165/locations/us-central1/functions  
+ Thu May 04 2017 07:06:36 GMT+0100 (BST)
