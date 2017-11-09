@@ -4,7 +4,7 @@ import Vue from 'vue';
 import VueFire from 'vuefire';
 import firebase from 'firebase';
 import Vuex from 'vuex';
-import vueLogger from 'vue-logger';
+// import vueLogger from 'vue-logger';
 import BootstrapVue from 'bootstrap-vue';
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -24,7 +24,7 @@ require('firebaseui/dist/firebaseui.css');
 
 Vue.config.productionTip = false;
 Vue.use(VueFire);
-Vue.use(vueLogger, { prefix: new Date(), dev: true });
+// Vue.use(vueLogger, { prefix: new Date(), dev: true });
 Vue.use(BootstrapVue);
 Vue.use(Vuex);
 // const todosRef = Firebase('https://vue-todo-app-4c165.firebaseio.com/');

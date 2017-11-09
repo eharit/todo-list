@@ -19,7 +19,6 @@
     "firebase": "^3.7.8",
     "firebaseui": "^1.0.1",
     "vue": "^2.3.2",
-    "vue-logger": "^1.0.0",
     "vue-router": "^2.4.0",
     "vuedraggable": "^2.10.0",
     "vuefire": "^1.4.2",
