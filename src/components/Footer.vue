@@ -2,8 +2,8 @@
   <footer class="footer" v-show="name">
     <div class="container">
       <div class="row">
-        <div class="col-3 text-left">
-          <b-dropdown :right="false" :dropup="true" variant="link">
+        <div class="col text-left">
+          <b-dropdown :right="false" variant="link">
             <span slot="text"
               class="pic" :alt="name" :title="name"
               :style="{ backgroundImage: 'url(' + photo + ')' }"
@@ -19,24 +19,12 @@
             </b-dropdown-item>
           </b-dropdown>
         </div>
-
+        <div class="col logo">
+          <img src='../assets/logo.png' width="35" height="35">
+        </div>
         <div class="col text-right">
           <button :disabled="!undos" class="btn btn-link btn-sm vertical-middle" type="button" name="button"
             @click="undoTodo"><span v-if="undos" class="badge badge-danger">{{ undos }}</span><i class="material-icons">&#xE042;</i></button>
-
-          <!-- <div class="dropdown dropup">
-            <button @click="toggleDropdown"
-              class="btn btn-link"
-              type="button" id="dropdownMenuButton"
-              aria-haspopup="true" aria-expanded="false">
-              <i class="material-icons">&#xE5D2;</i>
-            </button>
-            <div v-if="expanded" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" @click="logOut">Sign out</a>
-              <a class="dropdown-item" v-if="undos" @click="emptyTrash">Clear undos</a>
-            </div>
-          </div> -->
-
         </div>
       </div>
     </div>
@@ -71,11 +59,15 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.logo {
+  display: block;
+  margin: auto;
+  img {
+    vertical-align: top !important;
+  }
+}
 .dropdown {
   display: inline-block;
-}
-.dropdown-menu {
-  display: block;
 }
 .material-icons {
   vertical-align: top;
@@ -85,7 +77,7 @@ export default {
 }
 footer {
   position: fixed;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
   background-color: whitesmoke;

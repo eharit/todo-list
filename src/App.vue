@@ -1,10 +1,6 @@
 <template>
   <transition appear>
     <div id='app'>
-      <h1>
-        <img src='./assets/logo.png' width="35" height="35">
-        {{ appName }}
-      </h1>
       <router-view></router-view>
     </div>
   </transition>
@@ -30,12 +26,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin: 20px 10px 60px;
+  margin: 85px 10px 60px;
 }
 h1, h2 {
   font-weight: normal;
 }
 img {
   vertical-align: initial;
+}
+.show > .dropdown-menu {
+  display: block !important;
 }
 </style>

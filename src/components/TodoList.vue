@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <hr/>
+    <hr />
 
     <transition name="fade" mode="out-in" duration="125">
       <div class="row" v-if="todos.length && !loading">
@@ -70,16 +70,16 @@ export default {
   data() {
     return {
       title: 'Todo List',
-      todos: [],
+      todos: Array,
       loading: true,
       connected: false,
-      user: {},
-      log: '',
-      photo: '',
-      userId: '',
-      name: '',
-      email: '',
-      trash: [],
+      user: Object,
+      log: String(''),
+      photo: String,
+      userId: String,
+      name: String,
+      email: String,
+      trash: Array,
     };
   },
   computed: {
